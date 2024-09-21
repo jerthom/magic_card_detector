@@ -531,7 +531,7 @@ class TestImage:
 
         plt.savefig(output_path + '/MTG_card_recognition_results_' +
                     str(self.name.split('.jpg')[0]) +
-                    '.jpg', dpi=600, bbox='tight')
+                    '.jpg', dpi=600)#, bbbox='tight')
         if visual:
             plt.show()
 
@@ -689,7 +689,7 @@ class MagicCardDetector:
             plt.imshow(thresh)
             plt.show()
 
-        _, contours, _ = cv2.findContours(
+        contours, _ = cv2.findContours(
             np.uint8(thresh), cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
         return contours
 
@@ -704,11 +704,11 @@ class MagicCardDetector:
         _, thr_b = cv2.threshold(blue, 110, 255, cv2.THRESH_BINARY)
         _, thr_g = cv2.threshold(green, 110, 255, cv2.THRESH_BINARY)
         _, thr_r = cv2.threshold(red, 110, 255, cv2.THRESH_BINARY)
-        _, contours_b, _ = cv2.findContours(
+        contours_b, _ = cv2.findContours(
             np.uint8(thr_b), cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
-        _, contours_g, _ = cv2.findContours(
+        contours_g, _ = cv2.findContours(
             np.uint8(thr_g), cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
-        _, contours_r, _ = cv2.findContours(
+        contours_r, _ = cv2.findContours(
             np.uint8(thr_r), cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
         contours = contours_b + contours_g + contours_r
         if self.visual and self.verbose:
@@ -876,6 +876,7 @@ class MagicCardDetector:
             print('Plotting and saving the results...')
             test_image.plot_image_with_recognized(self.output_path, self.visual)
             print('Done.')
+            print(f'TEST: {test_image.name}')
             test_image.print_recognized()
         print('Recognition done.')
 
@@ -953,6 +954,7 @@ def main():
     if not os.path.exists(output_path):
         os.mkdir(output_path)
 
+    print(f'Output path: {output_path}')
     # Instantiate the detector
     card_detector = MagicCardDetector(output_path)
 
